@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet, useLocation, NavLink } from 'react-router-dom';
 import { ScanLine, BarChart3, Receipt, MoreHorizontal, Globe, QrCode } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 const Layout: React.FC = () => {
   const location = useLocation();
@@ -50,11 +51,14 @@ const Layout: React.FC = () => {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-border">
-          <Button variant="outline" size="sm" className="w-full justify-start gap-2">
-            <Globe className="h-4 w-4" />
-            O'zbek tili
-          </Button>
+        <div className="p-4 border-t border-border space-y-2">
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="flex-1 justify-start gap-2">
+              <Globe className="h-4 w-4" />
+              O'zbek tili
+            </Button>
+            <ThemeToggle />
+          </div>
         </div>
       </aside>
 
@@ -70,10 +74,13 @@ const Layout: React.FC = () => {
               <p className="text-xs text-muted-foreground">Finance & Health</p>
             </div>
           </div>
-          <Button variant="outline" size="sm" className="gap-2">
-            <Globe className="h-4 w-4" />
-            UZ
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="gap-2">
+              <Globe className="h-4 w-4" />
+              UZ
+            </Button>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
