@@ -7,10 +7,11 @@ import { ThemeToggle } from '@/components/theme-toggle';
 const Layout: React.FC = () => {
   const location = useLocation();
 
-  const navItems = [
+const navItems = [
     { to: '/app/scanner', icon: ScanLine, label: 'Scanner', labelUz: 'Skaner' },
     { to: '/app/insights', icon: BarChart3, label: 'Insights', labelUz: 'Analitika' },
     { to: '/app/receipts', icon: Receipt, label: 'Receipts', labelUz: 'Cheklar' },
+    { to: '/app/markets', icon: Globe, label: 'Markets', labelUz: 'Bozorlar' },
     { to: '/app/more', icon: MoreHorizontal, label: 'More', labelUz: 'Boshqa' }
   ];
 
@@ -93,7 +94,7 @@ const Layout: React.FC = () => {
 
       {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 glass-effect border-t border-border">
-        <div className="grid grid-cols-4 px-2 py-2">
+        <div className="grid grid-cols-5 px-2 py-2">
           {navItems.map((item) => (
             <NavLink
               key={item.to}

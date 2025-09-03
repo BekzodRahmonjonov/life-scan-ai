@@ -1,10 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { QrCode, BarChart3, TrendingUp } from 'lucide-react';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import heroImage from '@/assets/hero-scan.jpg';
+import ProductCarousel from '@/components/ProductCarousel';
+import OnboardingFlow from '@/components/OnboardingFlow';
+import Autoplay from 'embla-carousel-autoplay';
 
 const Welcome: React.FC = () => {
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  // Check if it's first time user
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem('scandora-onboarding-completed');
+    if (!hasSeenOnboarding) {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleOnboardingComplete = () => {
+    localStorage.setItem('scandora-onboarding-completed', 'true');
+    setShowOnboarding(false);
+  };
+
+  const featureCards = [
+    {
+      id: 1,
+      icon: QrCode,
+      title: 'Tez skanerlash',
+      description: 'QR kodlarni bir soniyada skanerlang va ma\'lumotlarni avtomatik saqlang',
+      accent: 'expense',
+      illustration: '📱'
+    },
+    {
+      id: 2,
+      icon: BarChart3,
+      title: 'AI Analitika',
+      description: 'Xarajatlaringizni tahlil qiling va sog\'liq bo\'yicha shaxsiy tavsiyalar oling',
+      accent: 'health',
+      illustration: '📊'
+    },
+    {
+      id: 3,
+      icon: TrendingUp,
+      title: 'Pul tejash',
+      description: 'Eng arzon narxlarni toping va oqilona xarid qilish bo\'yicha maslahat oling',
+      accent: 'primary',
+      illustration: '💰'
+    }
+  ];
+
+  const plugin = React.useRef(
+    Autoplay({ delay: 4000, stopOnInteraction: true })
+  );
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Hero Section */}
@@ -48,40 +97,55 @@ const Welcome: React.FC = () => {
         </div>
       </div>
 
-      {/* Features Preview */}
+      {/* Product Carousel */}
+      <div className="px-4 pb-6">
+        <ProductCarousel />
+      </div>
+
+      {/* Features Preview - Horizontal Carousel */}
       <div className="px-4 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
-          <div className="card-soft p-6 text-center space-y-3">
-            <div className="mx-auto w-12 h-12 bg-expense/10 rounded-xl flex items-center justify-center">
-              <QrCode className="h-6 w-6 text-expense" />
-            </div>
-            <h3 className="font-semibold">Tez skanerlash</h3>
-            <p className="text-sm text-muted-foreground">
-              QR kodlarni bir soniyada skanerlang va ma'lumotlarni avtomatik sarang
-            </p>
-          </div>
-
-          <div className="card-soft p-6 text-center space-y-3">
-            <div className="mx-auto w-12 h-12 bg-health/10 rounded-xl flex items-center justify-center">
-              <BarChart3 className="h-6 w-6 text-health" />
-            </div>
-            <h3 className="font-semibold">AI Analitika</h3>
-            <p className="text-sm text-muted-foreground">
-              Xarajatlaringizni tahlil qiling va sog'liq bo'yicha shaxsiy tavsiyalar oling
-            </p>
-          </div>
-
-          <div className="card-soft p-6 text-center space-y-3">
-            <div className="mx-auto w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-              <TrendingUp className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="font-semibold">Pul tejash</h3>
-            <p className="text-sm text-muted-foreground">
-              Eng arzon narxlarni toping va oqilona xarid qilish bo'yicha maslahat oling
-            </p>
-          </div>
+        <h3 className="text-lg font-semibold mb-4 text-center">ScanDora imkoniyatlari</h3>
+        <Carousel
+          plugins={[plugin.current]}
+          className="w-full max-w-4xl mx-auto"
+          onMouseEnter={plugin.current.stop}
+          onMouseLeave={plugin.current.reset}
+        >
+          <CarouselContent>
+            {featureCards.map((feature) => (
+              <CarouselItem key={feature.id} className="md:basis-1/2 lg:basis-1/3">
+                <div className="card-soft p-6 text-center space-y-4 mx-2">
+                  <div className="text-4xl mb-2">{feature.illustration}</div>
+                  <div className={`mx-auto w-12 h-12 bg-${feature.accent}/10 rounded-xl flex items-center justify-center`}>
+                    <feature.icon className={`h-6 w-6 text-${feature.accent}`} />
+                  </div>
+                  <h3 className="font-semibold">{feature.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="hidden md:flex" />
+          <CarouselNext className="hidden md:flex" />
+        </Carousel>
+        
+        {/* Pagination dots */}
+        <div className="flex justify-center gap-2 mt-4">
+          {featureCards.map((_, index) => (
+            <div
+              key={index}
+              className="w-2 h-2 rounded-full bg-muted"
+            />
+          ))}
         </div>
       </div>
+
+      <OnboardingFlow 
+        open={showOnboarding} 
+        onComplete={handleOnboardingComplete}
+      />
     </div>
   );
 };

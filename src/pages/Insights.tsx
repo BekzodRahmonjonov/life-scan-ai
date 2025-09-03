@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TrendingUp, TrendingDown, DollarSign, ShoppingBag, Heart, Lightbulb, Calendar } from 'lucide-react';
+import ExpenseTrendModal from '@/components/ExpenseTrendModal';
 import { 
   mockReceipts, 
   categoryData, 
@@ -15,6 +16,7 @@ import {
 
 const Insights: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [showTrendModal, setShowTrendModal] = useState(false);
 
   // Calculate totals
   const totalSpent = mockReceipts.reduce((sum, receipt) => sum + receipt.totalUZS, 0);
@@ -34,8 +36,8 @@ const Insights: React.FC = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-3 gap-4">
-          <div className="text-center p-3 bg-expense/5 rounded-xl border border-expense/20">
-            <p className="text-2xl font-bold text-expense">{formatCurrency(totalSpent)}</p>
+          <div className="text-center p-3 bg-muted/10 rounded-xl border">
+            <p className="text-2xl font-bold text-foreground">{formatCurrency(totalSpent)}</p>
             <p className="text-xs text-muted-foreground">Jami xarajat</p>
           </div>
           <div className="text-center p-3 bg-primary/5 rounded-xl border border-primary/20">
@@ -189,7 +191,7 @@ const Insights: React.FC = () => {
           <CategoryBreakdown />
           
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="card-soft">
+            <Card className="card-soft cursor-pointer hover:shadow-elevated transition-all duration-300" onClick={() => setShowTrendModal(true)}>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-expense" />
@@ -197,10 +199,15 @@ const Insights: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-expense" />
-                  <span className="text-sm text-muted-foreground">O'tgan haftaga nisbatan</span>
-                  <Badge className="bg-expense/10 text-expense">+12%</Badge>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-expense" />
+                    <span className="text-sm text-muted-foreground">O'tgan haftaga nisbatan</span>
+                    <Badge className="bg-expense/10 text-expense">+12%</Badge>
+                  </div>
+                  <Button variant="ghost" size="sm">
+                    Ko'rish
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -262,6 +269,11 @@ const Insights: React.FC = () => {
           <SavingTipsSection />
         </TabsContent>
       </Tabs>
+
+      <ExpenseTrendModal 
+        open={showTrendModal} 
+        onOpenChange={setShowTrendModal} 
+      />
     </div>
   );
 };

@@ -25,7 +25,7 @@ import {
   formatDate,
   type Receipt 
 } from '@/data/mockData';
-import emptyImage from '@/assets/empty-receipts.jpg';
+import { getCategoryIcon } from '@/utils/categoryIcons';
 
 const Receipts: React.FC = () => {
   const [selectedReceipt, setSelectedReceipt] = useState<Receipt | null>(null);
